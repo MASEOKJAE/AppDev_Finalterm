@@ -1,67 +1,94 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
-class MyPage extends StatefulWidget {
-  const MyPage({Key? key}) : super(key: key);
+class Profile extends StatefulWidget {
+  const Profile({Key? key}) : super(key: key);
 
   @override
-  _MyPageState createState() => _MyPageState();
+  _ProfileState createState() => _ProfileState();
 }
 
-class _MyPageState extends State<MyPage> {
-  // Rect getClip(Size size) {
-  //   return const Rect.fromLTWH(0, 0, 200, 100);
-  // }
+class _ProfileState extends State<Profile> {
+  User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
-    Widget profile = Column(
-      children: [
-        /*2*/
-        Container(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: const Text(
-            'MA SEOK JAE',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        Text(
-          '21800239',
-          style: TextStyle(
-            color: Colors.grey[500],
-          ),
-        ),
-      ],
-    );
-
-
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('My Page'),
-        ),
-        body: Center(
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 30),
-                child: ClipOval(
-                  child: Container(
-                    color: Colors.lightBlueAccent,
-                    // child: Lottie.network(
-                    //   'https://raw.githubusercontent.com/xvrh/lottie-flutter/master/example/assets/Mobilo/A.json',
-                    //   width: 150,
-                    //   height: 150,
-                    // ),
-                  ),
-                ),
-              ),
-              profile,
-              // Expanded(child: myfvhotel),
-            ],
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.exit_to_app),
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              Navigator.pushReplacementNamed(context, '/login');
+            },
           ),
-        ));
+        ],
+      ),
+      backgroundColor: Colors.black,
+      body: Padding(
+        padding: const EdgeInsets.all(70.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (user != null)
+              Container(
+                width: 100,
+                height: 100,
+                // decoration: const BoxDecoration(
+                //   image: DecorationImage(
+                //     fit: BoxFit.cover,
+                //     image:
+                //   ),
+                //     shape: BoxShape.rectangle,
+                //   ),
+              ),
+            const SizedBox(height: 10),
+            Text(
+              '<${user?.uid}>',
+              style: const TextStyle(
+                fontSize: 30,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            const Divider(
+              height: 1.0,
+              thickness: 1,
+              color: Colors.white,
+            ),
+
+            const SizedBox(height: 30),
+            Text(
+              user?.email ?? 'Anonymous',
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 60),
+            const Text(
+              'MA SEOK JAE',
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 15),
+            const Text(
+              'I promise to take the test honestly before GOD',
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

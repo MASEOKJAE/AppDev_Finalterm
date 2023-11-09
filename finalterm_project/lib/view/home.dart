@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart' // new
-    hide EmailAuthProvider, PhoneAuthProvider;    // new
-import 'package:flutter/material.dart';           // new
-import 'package:provider/provider.dart';          // new
+    hide
+        EmailAuthProvider,
+        PhoneAuthProvider; // new
+import 'package:flutter/material.dart'; // new
+import 'package:provider/provider.dart'; // new
 
-import '../app_state.dart';                          // new
-import '../src/authentication.dart';  
+import '../app_state.dart'; // new
+import '../src/authentication.dart';
 import 'package:flutter/material.dart';
-
 
 // import '../model/hotel.dart';
 // import '../model/hotels_repository.dart';
@@ -22,7 +23,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   bool _isGridView = true; // true for GridView, false for ListView
-
 
   // TODO: Make a collection of cards (102)
   // List<Widget> _buildGridCards(BuildContext context) {
@@ -205,63 +205,7 @@ class _HomePageState extends State<HomePage> {
   //   }).toList();
   // }
 
-  String _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
-    String routeName = '';
-    switch (index) {
-      case 0:
-        routeName = '/home';
-        break;
-      case 1:
-        routeName = '/search';
-        break;
-      case 2:
-        routeName = '/fvhotel';
-        break;
-      case 3:
-        routeName = '/mypage';
-        break;
-      case 4:
-        routeName = '/login';
-        break;
-    }
-    return routeName;
-  }
-
-  // Drawer ListTile Function
-  ListTile buildDrawerListTile(int index) {
-    List<String> titles = [
-      'Home',
-      'Search',
-      'Favorite Hotel',
-      'My Page',
-      'Log Out'
-    ];
-    List<IconData> icons = [
-      Icons.home,
-      Icons.search,
-      Icons.location_city,
-      Icons.person,
-      Icons.logout
-    ];
-
-    return ListTile(
-      leading: Icon(icons[index], color: Colors.blue),
-      title: Text(titles[index]),
-      selected: _selectedIndex == index,
-      onTap: () {
-        // Update the state of the app
-        String routeName = _onItemTapped(index);
-        // Then close the drawer
-        Navigator.pop(context);
-        Navigator.pushNamed(context, routeName);
-      },
-    );
-  }
-
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -269,23 +213,22 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('Main'),
         centerTitle: true,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.grey.shade600,
         iconTheme: const IconThemeData(color: Colors.white),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.account_circle,
+            semanticLabel: 'profile',
+            color: Colors.white,
+          ), onPressed: () {
+            Navigator.pushNamed(context, '/profile');
+          },
+        ),
         actions: <Widget>[
           IconButton(
             icon: const Icon(
-              Icons.search,
-              semanticLabel: 'search',
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, '/search');
-            },
-          ),
-          IconButton(
-            icon: const Icon(
-              Icons.language,
-              semanticLabel: 'language',
+              Icons.add,
+              semanticLabel: 'plus',
               color: Colors.white,
             ),
             onPressed: () {
@@ -308,7 +251,7 @@ class _HomePageState extends State<HomePage> {
                   children: const [
                     Icon(Icons.list),
                     Icon(Icons.grid_view),
-                  ], 
+                  ],
                   onPressed: (index) {
                     setState(() {
                       _isGridView = index == 1;
@@ -332,48 +275,24 @@ class _HomePageState extends State<HomePage> {
                         mainAxisSpacing: .5,
                         // children: _buildGridCards(context),
                       )
-                    : ListView(
-                        padding: const EdgeInsets.all(16.0),
-                        children: [
-                          Container(
-                            color: Colors.red,
-                            height: 100,
-                            width: 100,
-                          ),   Container(
-                            color: Colors.red,
-                            height: 100,
-                            width: 100,
-                )]);                                              //_buildGridCards(context));
+                    : ListView(padding: const EdgeInsets.all(16.0), children: [
+                        Container(
+                          color: Colors.red,
+                          height: 100,
+                          width: 100,
+                        ),
+                        Container(
+                          color: Colors.red,
+                          height: 100,
+                          width: 100,
+                        )
+                      ]); //_buildGridCards(context));
               },
             ),
           ),
         ],
       ),
 
-      drawer: Drawer(
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                ),
-                child: Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Text(
-                    'Pages',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
-                      color: Colors.white,
-                    ),
-                  ),
-                )),
-            ...List.generate(5, buildDrawerListTile),
-          ],
-        ),
-      ),
       resizeToAvoidBottomInset: false,
     );
   }
