@@ -232,7 +232,7 @@ class _HomePageState extends State<HomePage> {
               color: Colors.white,
             ),
             onPressed: () {
-              // _launchURL();
+              Navigator.pushNamed(context, '/add');
             },
           )
         ],
@@ -248,16 +248,16 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ToggleButtons(
-                  children: const [
-                    Icon(Icons.list),
-                    Icon(Icons.grid_view),
-                  ],
                   onPressed: (index) {
                     setState(() {
                       _isGridView = index == 1;
                     });
                   },
                   isSelected: [!_isGridView, _isGridView],
+                  children: const [
+                    Icon(Icons.list),
+                    Icon(Icons.grid_view),
+                  ],
                 ),
               ],
             ),

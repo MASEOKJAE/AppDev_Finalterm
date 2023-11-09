@@ -9,10 +9,7 @@ import 'package:flutter/material.dart';
 import 'view/home.dart';
 import 'view/login.dart';
 import 'view/profile.dart';
-// import 'view/signup.dart';
-// import 'view/search.dart';
-// import 'view/fvhotel.dart';
-// import 'view/detail.dart';
+import 'view/add.dart';
 
 // TODO: Convert ShrineApp to stateful widget (104)
 class ShrineApp extends StatelessWidget {
@@ -25,10 +22,8 @@ class ShrineApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         '/login': (BuildContext context) => const LoginPage(),
-        // '/signup': (BuildContext context) => const SignUpPage(),
         '/': (BuildContext context) => const HomePage(),
-        // '/search': (BuildContext context) => const SearchPage(),
-        // '/fvhotel': (BuildContext context) => const FvHotelPage(),
+        '/add': (BuildContext context) => const AddPage(),
         '/profile': (BuildContext context) => const Profile(),
         // '/detail': (BuildContext context) => const DetailPage(),
       },
@@ -37,6 +32,3 @@ class ShrineApp extends StatelessWidget {
     );
   }
 }
-
-// TODO: Build a Shrine Theme (103)
-// TODO: Build a Shrine Text Theme (103)
