@@ -23,7 +23,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  bool _isGridView = true; // true for GridView, false for ListView
+  User? user = FirebaseAuth.instance.currentUser;
 
   StreamBuilder<QuerySnapshot> _buildGridCards(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -35,8 +35,8 @@ class _HomePageState extends State<HomePage> {
 
         return GridView.builder(
           itemCount: documents.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, // 한 행에 두 개의 항목 표시
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
           ),
@@ -55,27 +55,37 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            documents[index]['name'],
-                            style: const TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.bold),
-                            maxLines: 1,
+                      padding: const EdgeInsets.all(5),
+                      child: Stack(
+                        alignment: Alignment.bottomRight,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        documents[index]['name'],
+                                        style: const TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.bold),
+                                        maxLines: 1,
+                                      ),
+                                      const SizedBox(height: 2.0),
+                                      Text(
+                                        'Price: ${documents[index]['price']}',
+                                        style: const TextStyle(fontSize: 10),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                          SizedBox(height: 2.0),
-                          Text(
-                            'Price: ${documents[index]['price']}',
-                            style: const TextStyle(fontSize: 10),
-                          ),
-                          SizedBox(height: 2.0),
-                          Text(
-                            documents[index]['Description'],
-                            style: const TextStyle(fontSize: 10),
-                          ),
-                          SizedBox(height: 2.0),
                           TextButton(
                             onPressed: () {
                               Navigator.pushNamed(
@@ -138,7 +148,9 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
         children: [
-          const SizedBox(height: 30,),
+          const SizedBox(
+            height: 30,
+          ),
           DropdownButton<String>(
             items: <String>['A', 'B', 'C', 'D'].map((String value) {
               return DropdownMenuItem<String>(
@@ -148,7 +160,9 @@ class _HomePageState extends State<HomePage> {
             }).toList(),
             onChanged: (_) {},
           ),
-          const SizedBox(height: 30,),
+          const SizedBox(
+            height: 30,
+          ),
           Expanded(child: _buildGridCards(context)),
         ],
       ),

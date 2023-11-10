@@ -3,6 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AddPage extends StatefulWidget {
   const AddPage({Key? key}) : super(key: key);
@@ -15,6 +16,7 @@ class _AddState extends State<AddPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _descriptController = TextEditingController();
+  User? user = FirebaseAuth.instance.currentUser;
   final ImagePicker _picker = ImagePicker();
   XFile? _image;
   bool _isLoading = false;
@@ -44,6 +46,7 @@ class _AddState extends State<AddPage> {
     final String imageUrl = await _uploadImage();
 
     await FirebaseFirestore.instance.collection('products').add({
+      'userId': user?.uid,
       'name': _nameController.text,
       'price': _priceController.text,
       'Description': _descriptController.text,
