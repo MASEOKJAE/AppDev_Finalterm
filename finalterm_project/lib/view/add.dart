@@ -45,12 +45,21 @@ class _AddState extends State<AddPage> {
 
     final String imageUrl = await _uploadImage();
 
-    await FirebaseFirestore.instance.collection('products').add({
+    DocumentReference ref = await FirebaseFirestore.instance.collection('products').add({
       'userId': user?.uid,
       'name': _nameController.text,
       'price': _priceController.text,
       'Description': _descriptController.text,
       'image': imageUrl,
+      'saveTime': FieldValue.serverTimestamp(),
+      'modifyTime': FieldValue.serverTimestamp(),
+      'like': 0,
+    });
+
+    String docId = ref.id;
+
+    await FirebaseFirestore.instance.collection('products').doc(docId).update({
+      'pid': docId,
     });
 
     setState(() {
@@ -59,6 +68,7 @@ class _AddState extends State<AddPage> {
 
     Navigator.pop(context);
   }
+
 
   Future<String> _uploadImage() async {
     if (_image == null) {
