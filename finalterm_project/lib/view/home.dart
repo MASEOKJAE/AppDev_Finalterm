@@ -10,10 +10,6 @@ import '../app_state.dart'; // new
 import '../src/authentication.dart';
 import 'package:flutter/material.dart';
 
-// import '../model/hotel.dart';
-// import '../model/hotels_repository.dart';
-// import 'package:url_launcher/url_launcher.dart';
-
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 

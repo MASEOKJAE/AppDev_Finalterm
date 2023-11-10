@@ -45,7 +45,7 @@ class _AddState extends State<AddPage> {
 
     final String imageUrl = await _uploadImage();
 
-    DocumentReference ref = await FirebaseFirestore.instance.collection('products').add({
+    await FirebaseFirestore.instance.collection('products').add({
       'userId': user?.uid,
       'name': _nameController.text,
       'price': _priceController.text,
@@ -56,11 +56,6 @@ class _AddState extends State<AddPage> {
       'like': 0,
     });
 
-    String docId = ref.id;
-
-    await FirebaseFirestore.instance.collection('products').doc(docId).update({
-      'pid': docId,
-    });
 
     setState(() {
       _isLoading = false;
