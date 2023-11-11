@@ -1,5 +1,8 @@
+import 'package:finalterm_project/model/product.dart';
+import 'package:finalterm_project/model/product_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 class ModifyPage extends StatefulWidget {
   final DocumentSnapshot? productData;
@@ -14,7 +17,7 @@ class _ModifyPageState extends State<ModifyPage> {
   final _nameController = TextEditingController();
   final _priceController = TextEditingController();
   final _descriptionController = TextEditingController();
-  DocumentSnapshot? productData;
+  ProductModel? product;
 
   @override
   void initState() {
@@ -24,30 +27,28 @@ class _ModifyPageState extends State<ModifyPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (productData == null) {
-      productData =
-          ModalRoute.of(context)!.settings.arguments as DocumentSnapshot;
-      _nameController.text = productData!['name'];
-      _priceController.text = productData!['price'];
-      _descriptionController.text = productData!['Description'];
+    if (product == null) {
+      product = ModalRoute.of(context)!.settings.arguments as ProductModel;
+      _nameController.text = product!.name;
+      _priceController.text = product!.price.toString();
+      _descriptionController.text = product!.description;
     }
   }
 
   Future<void> _modifyProduct() async {
-    await FirebaseFirestore.instance
-        .collection('products')
-        .doc(productData!.id)
-        .update({
-      'name': _nameController.text,
-      'price': _priceController.text,
-      'Description': _descriptionController.text,
-    });
+    product!
+      ..name = _nameController.text
+      ..price = int.parse(_priceController.text)
+      ..description = _descriptionController.text;
+
+    Provider.of<ProductRepository>(context, listen: false).updateProduct(product!);
+
     Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (productData == null) {
+    if (product == null) {
       return const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
@@ -85,7 +86,7 @@ class _ModifyPageState extends State<ModifyPage> {
           child: Column(
             children: <Widget>[
               Image.network(
-                productData!['image'],
+                product!.image!,
                 height: 300,
                 width: double.infinity,
                 fit: BoxFit.contain,

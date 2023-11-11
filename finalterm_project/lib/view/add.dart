@@ -1,9 +1,13 @@
 import 'dart:io';
+import 'package:finalterm_project/model/product.dart';
+import 'package:finalterm_project/model/product_repository.dart';
+import 'package:finalterm_project/model/user_repository.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 class AddPage extends StatefulWidget {
   const AddPage({Key? key}) : super(key: key);
@@ -16,7 +20,6 @@ class _AddState extends State<AddPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _descriptController = TextEditingController();
-  User? user = FirebaseAuth.instance.currentUser;
   final ImagePicker _picker = ImagePicker();
   XFile? _image;
   bool _isLoading = false;
@@ -38,6 +41,8 @@ class _AddState extends State<AddPage> {
     }
   }
 
+  String get userId => UserRepository.user!.uid;
+
   Future<void> _addProduct() async {
     setState(() {
       _isLoading = true;
@@ -45,16 +50,18 @@ class _AddState extends State<AddPage> {
 
     final String imageUrl = await _uploadImage();
 
-    await FirebaseFirestore.instance.collection('products').add({
-      'userId': user?.uid,
+    ProductModel newProduct = ProductModel.fromJson({
+      'userId': userId,
       'name': _nameController.text,
-      'price': _priceController.text,
+      'price': int.parse(_priceController.text),
       'Description': _descriptController.text,
       'image': imageUrl,
-      'saveTime': FieldValue.serverTimestamp(),
-      'modifyTime': FieldValue.serverTimestamp(),
+      'saveTime': Timestamp.now(),
+      'modifyTime': Timestamp.now(),
       'likedUid': [],
     });
+
+    Provider.of<ProductRepository>(context, listen: false).addProduct(newProduct);
 
     setState(() {
       _isLoading = false;

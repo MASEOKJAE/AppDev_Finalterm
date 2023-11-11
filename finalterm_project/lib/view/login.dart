@@ -1,6 +1,10 @@
+import 'package:finalterm_project/model/product_repository.dart';
+import 'package:finalterm_project/model/user.dart';
+import 'package:finalterm_project/model/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -41,6 +45,8 @@ class _LoginPageState extends State<LoginPage> {
               child: const Text('Sign in with Google'),
               onPressed: () async {
                 final UserCredential userCredential = await signInWithGoogle();
+                UserRepository.login(UserModel.fromCredential(userCredential));
+                await Provider.of<ProductRepository>(context, listen: false).loadAllFromDatabase();
                 Navigator.pushReplacementNamed(context, '/');
               },
             ),
@@ -48,6 +54,8 @@ class _LoginPageState extends State<LoginPage> {
               child: const Text('Sign in Anonymously'),
               onPressed: () async {
                 final UserCredential userCredential = await signInAnonymously();
+                UserRepository.login(UserModel.fromCredential(userCredential));
+                await Provider.of<ProductRepository>(context, listen: false).loadAllFromDatabase();
                 Navigator.pushReplacementNamed(context, '/');
               },
             ),
