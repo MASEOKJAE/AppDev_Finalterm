@@ -11,6 +11,7 @@ import 'view/login.dart';
 import 'view/profile.dart';
 import 'view/add.dart';
 import 'view/detail.dart';
+import 'view/modify.dart';
 
 // TODO: Convert ShrineApp to stateful widget (104)
 class ShrineApp extends StatelessWidget {
@@ -27,6 +28,7 @@ class ShrineApp extends StatelessWidget {
         '/add': (BuildContext context) => const AddPage(),
         '/profile': (BuildContext context) => const Profile(),
         '/detail': (BuildContext context) => const DetailPage(),
+        '/modify': (BuildContext context) => const ModifyPage(),
       },
       // TODO: Customize the theme (103)
       theme: ThemeData.light(useMaterial3: false),

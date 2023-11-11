@@ -6,7 +6,7 @@ class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
 
   @override
-  _ProfileState createState() => _ProfileState();
+  State<Profile> createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
@@ -35,17 +35,17 @@ class _ProfileState extends State<Profile> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (user != null)
-              Container(
-                width: 100,
-                height: 100,
-                // decoration: const BoxDecoration(
-                //   image: DecorationImage(
-                //     fit: BoxFit.cover,
-                //     image:
-                //   ),
-                //     shape: BoxShape.rectangle,
-                //   ),
-              ),
+              // Container(
+              //   width: 100,
+              //   height: 100,
+              //   decoration: const BoxDecoration(
+              //     image: DecorationImage(
+              //       fit: BoxFit.cover,
+              //       image: 
+              //     ),
+              //       shape: BoxShape.rectangle,
+              //     ),
+              // ),
             const SizedBox(height: 10),
             Text(
               '<${user?.uid}>',

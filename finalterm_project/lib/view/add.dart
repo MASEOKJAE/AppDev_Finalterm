@@ -9,7 +9,7 @@ class AddPage extends StatefulWidget {
   const AddPage({Key? key}) : super(key: key);
 
   @override
-  _AddState createState() => _AddState();
+  State<AddPage> createState() => _AddState();
 }
 
 class _AddState extends State<AddPage> {
@@ -53,9 +53,8 @@ class _AddState extends State<AddPage> {
       'image': imageUrl,
       'saveTime': FieldValue.serverTimestamp(),
       'modifyTime': FieldValue.serverTimestamp(),
-      'like': 0,
+      'likedUid': [],
     });
-
 
     setState(() {
       _isLoading = false;
@@ -63,7 +62,6 @@ class _AddState extends State<AddPage> {
 
     Navigator.pop(context);
   }
-
 
   Future<String> _uploadImage() async {
     if (_image == null) {
@@ -87,6 +85,7 @@ class _AddState extends State<AddPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add'),
+        leadingWidth: 70,
         leading: IconButton(
           icon: const Text(
             'Cancel',
@@ -105,35 +104,35 @@ class _AddState extends State<AddPage> {
               child: CircularProgressIndicator(),
             )
           else
-             IconButton(
-            icon: const Text(
-              'Save',
-              style: TextStyle(color: Colors.white),
+            IconButton(
+              icon: const Text(
+                'Save',
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                _addProduct();
+              },
             ),
-            onPressed: () {
-              _addProduct();
-            },
-          ),
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
-            if (_image != null)
-              Image.file(File(_image!.path))
-            else
-              Image.network('http://handong.edu/site/handong/res/img/logo.png'),
-            IconButton(
-              icon: const Icon(
-                Icons.camera_alt,
-                semanticLabel: 'pickImage',
-                color: Colors.black,
-              ),
-              onPressed: () {
-                _pickImage();
-              },
-            ),
+            // if (_image != null)
+            //   Image.file(File(_image!.path))
+            // else
+            //   Image.network('http://handong.edu/site/handong/res/img/logo.png'),
+            // IconButton(
+            //   icon: const Icon(
+            //     Icons.camera_alt,
+            //     semanticLabel: 'pickImage',
+            //     color: Colors.black,
+            //   ),
+            //   onPressed: () {
+            //     _pickImage();
+            //   },
+            // ),
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -152,6 +151,7 @@ class _AddState extends State<AddPage> {
                   ),
                   TextField(
                     controller: _descriptController,
+                    maxLines: null,
                     decoration: const InputDecoration(
                       labelText: 'Description',
                     ),
