@@ -4,11 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart' // new
         EmailAuthProvider,
         PhoneAuthProvider; // new
 import 'package:flutter/material.dart'; // new
-import 'package:provider/provider.dart'; // new
-
-import '../app_state.dart'; // new
-import '../src/authentication.dart';
-import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -20,10 +15,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   User? user = FirebaseAuth.instance.currentUser;
+  String dropdownValue = 'Asc';
 
   StreamBuilder<QuerySnapshot> _buildGridCards(BuildContext context) {
+    final isAscending = dropdownValue != 'Desc';
     return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection('products').snapshots(),
+      stream: _firestore
+          .collection('products')
+          .orderBy('price', descending: !isAscending)
+          .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const CircularProgressIndicator();
 
@@ -62,7 +62,8 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         documents[index]['name'],
@@ -148,13 +149,22 @@ class _HomePageState extends State<HomePage> {
             height: 30,
           ),
           DropdownButton<String>(
-            items: <String>['A', 'B', 'C', 'D'].map((String value) {
+            value: dropdownValue,
+            items: <String>['Asc', 'Desc'].map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value),
               );
             }).toList(),
-            onChanged: (_) {},
+            onChanged: (String? newValue) {
+              if (newValue != null) {
+                setState(
+                  () {
+                    dropdownValue = newValue;
+                  },
+                );
+              }
+            },
           ),
           const SizedBox(
             height: 30,
