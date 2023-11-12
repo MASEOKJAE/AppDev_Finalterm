@@ -42,6 +42,8 @@ class _DetailPageState extends State<DetailPage> {
 
     return Consumer<ProductRepository>(
       builder: (context, provider, child) {
+        UserRepository userProvider =
+            Provider.of<UserRepository>(context, listen: false);
         ProductRepository repository =
             Provider.of<ProductRepository>(context, listen: false);
         ProductModel product = repository.getProduct(_product!.id!);
@@ -87,7 +89,8 @@ class _DetailPageState extends State<DetailPage> {
                         fit: BoxFit.contain,
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(50.0, 30.0, 50.0, 20.0),
+                        padding:
+                            const EdgeInsets.fromLTRB(50.0, 30.0, 50.0, 20.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -120,7 +123,7 @@ class _DetailPageState extends State<DetailPage> {
                                         await repository
                                             .updateOneToDatabase(product!);
                                         setState(() {});
-                      
+
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
@@ -147,7 +150,7 @@ class _DetailPageState extends State<DetailPage> {
                               ],
                             ),
                             const SizedBox(height: 10.0),
-                      
+
                             Text(
                               '\$ ${product.price}',
                               style: const TextStyle(
@@ -155,16 +158,16 @@ class _DetailPageState extends State<DetailPage> {
                                 color: Color.fromARGB(255, 22, 114, 220),
                               ),
                             ),
-                      
+
                             const SizedBox(height: 20.0),
-                      
+
                             const Divider(
                               height: 1.0,
                               color: Colors.black,
                             ),
-                      
+
                             const SizedBox(height: 15.0),
-                      
+
                             // Long description may need to scroll within the page.
                             SingleChildScrollView(
                               child: Container(
@@ -182,7 +185,7 @@ class _DetailPageState extends State<DetailPage> {
                                 ),
                               ),
                             ),
-                      
+
                             const SizedBox(
                               height: 50,
                             ),
@@ -194,18 +197,40 @@ class _DetailPageState extends State<DetailPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(50.0, 30.0, 100.0, 20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                padding: const EdgeInsets.fromLTRB(50.0, 10.0, 50.0, 50.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Creator: ${product.userId} \n${product.saveTime} Created\n${product.modifyTime} Modified',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Color.fromARGB(255, 22, 114, 220),
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Creator: ${product.userId} \n${product.saveTime} Created\n${product.modifyTime} Modified',
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: Color.fromARGB(255, 22, 114, 220),
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 50),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        FloatingActionButton(
+                          child: Icon(userProvider.isInWishlist(_product!.id!)
+                              ? Icons.check
+                              : Icons.shopping_cart),
+                          onPressed: () {
+                            if (userProvider.isInWishlist(_product!.id!)) {
+                              userProvider.removeFromWishlist(_product!.id!);
+                            } else {
+                              userProvider.addToWishlist(_product!.id!);
+                            }
+                            setState(() {});
+                          },
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
