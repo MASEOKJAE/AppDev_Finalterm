@@ -18,181 +18,85 @@ class _HomePageState extends State<HomePage> {
 
     Iterable<Widget> a;
 
-    return Consumer<ProductRepository>(
-      builder: (context, provider, child) {
-        return GridView(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // 한 행에 두 개의 항목 표시
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-          ),
-          children: provider.getSortedList(isAscending).map((p) {
-            return Card(
-              clipBehavior: Clip.antiAlias,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  AspectRatio(
-                    aspectRatio: 18 / 11,
-                    child: Image.network(
-                      p.image!,
-                      fit: BoxFit.cover,
-                    ),
+    return Consumer<ProductRepository>(builder: (context, provider, child) {
+      return GridView(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, // 한 행에 두 개의 항목 표시
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+        ),
+        children: provider.getSortedList(isAscending).map((p) {
+          return Card(
+            clipBehavior: Clip.antiAlias,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                AspectRatio(
+                  aspectRatio: 18 / 11,
+                  child: Image.network(
+                    p.image!,
+                    fit: BoxFit.cover,
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: Stack(
-                        alignment: Alignment.bottomRight,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        p.name,
-                                        style: const TextStyle(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.bold),
-                                        maxLines: 1,
-                                      ),
-                                      const SizedBox(height: 2.0),
-                                      Text(
-                                        'Price: ${p.price}',
-                                        style: const TextStyle(fontSize: 10),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: Stack(
+                      alignment: Alignment.bottomRight,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      p.name,
+                                      style: const TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold),
+                                      maxLines: 1,
+                                    ),
+                                    const SizedBox(height: 2.0),
+                                    Text(
+                                      'Price: ${p.price}',
+                                      style: const TextStyle(fontSize: 10),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
                           ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                context,
-                                '/detail',
-                                arguments: p,
-                              );
-                            },
-                            style: TextButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 5, vertical: 2),
-                              minimumSize: Size.zero,
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            ),
-                            child: const Text('more'),
-                          )
-                        ],
-                      ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(
+                              context,
+                              '/detail',
+                              arguments: p,
+                            );
+                          },
+                          style: TextButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 2),
+                            minimumSize: Size.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          ),
+                          child: const Text('more'),
+                        )
+                      ],
                     ),
                   ),
-                ],
-              ),
-            );
-          }).toList(),
-        );
-      }
-    );
-
-
-  //   return StreamBuilder<QuerySnapshot>(
-  //     stream: _firestore
-  //         .collection('products')
-  //         .orderBy('price', descending: !isAscending)
-  //         .snapshots(),
-  //     builder: (context, snapshot) {
-  //       if (!snapshot.hasData) return const CircularProgressIndicator();
-
-  //       final List<DocumentSnapshot> documents = snapshot.data!.docs;
-
-  //       return GridView.builder(
-  //         itemCount: documents.length,
-  //         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-  //           crossAxisCount: 2, // 한 행에 두 개의 항목 표시
-  //           crossAxisSpacing: 10,
-  //           mainAxisSpacing: 10,
-  //         ),
-  //         itemBuilder: (context, index) {
-  //           return Card(
-  //             clipBehavior: Clip.antiAlias,
-  //             child: Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: <Widget>[
-  //                 AspectRatio(
-  //                   aspectRatio: 18 / 11,
-  //                   child: Image.network(
-  //                     documents[index]['image'],
-  //                     fit: BoxFit.cover,
-  //                   ),
-  //                 ),
-  //                 Expanded(
-  //                   child: Padding(
-  //                     padding: const EdgeInsets.all(5),
-  //                     child: Stack(
-  //                       alignment: Alignment.bottomRight,
-  //                       children: [
-  //                         Padding(
-  //                           padding: const EdgeInsets.all(15.0),
-  //                           child: Row(
-  //                             crossAxisAlignment: CrossAxisAlignment.start,
-  //                             children: [
-  //                               Expanded(
-  //                                 child: Column(
-  //                                   crossAxisAlignment:
-  //                                       CrossAxisAlignment.start,
-  //                                   children: [
-  //                                     Text(
-  //                                       documents[index]['name'],
-  //                                       style: const TextStyle(
-  //                                           fontSize: 13,
-  //                                           fontWeight: FontWeight.bold),
-  //                                       maxLines: 1,
-  //                                     ),
-  //                                     const SizedBox(height: 2.0),
-  //                                     Text(
-  //                                       'Price: ${documents[index]['price']}',
-  //                                       style: const TextStyle(fontSize: 10),
-  //                                     ),
-  //                                   ],
-  //                                 ),
-  //                               )
-  //                             ],
-  //                           ),
-  //                         ),
-  //                         TextButton(
-  //                           onPressed: () {
-  //                             Navigator.pushNamed(
-  //                               context,
-  //                               '/detail',
-  //                               arguments: documents[index],
-  //                             );
-  //                           },
-  //                           style: TextButton.styleFrom(
-  //                             padding: const EdgeInsets.symmetric(
-  //                                 horizontal: 5, vertical: 2),
-  //                             minimumSize: Size.zero,
-  //                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-  //                           ),
-  //                           child: const Text('more'),
-  //                         )
-  //                       ],
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //           );
-  //         },
-  //       );
-  //     },
-  //   );
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+      );
+    });
   }
 
   @override
@@ -214,6 +118,16 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         actions: <Widget>[
+          IconButton(
+            icon: const Icon(
+              Icons.shopping_cart,
+              semanticLabel: 'cart',
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, '/wishlist');
+            },
+          ),
           IconButton(
             icon: const Icon(
               Icons.add,

@@ -4,9 +4,6 @@ import 'package:finalterm_project/model/product.dart';
 import 'package:finalterm_project/model/product_repository.dart';
 import 'package:finalterm_project/model/user_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
 class DetailPage extends StatefulWidget {
