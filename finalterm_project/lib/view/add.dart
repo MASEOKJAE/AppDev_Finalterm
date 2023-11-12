@@ -57,7 +57,6 @@ class _AddState extends State<AddPage> {
       'Description': _descriptController.text,
       'image': imageUrl,
       'saveTime': Timestamp.now(),
-      'modifyTime': Timestamp.now(),
       'likedUid': [],
     });
 

@@ -8,7 +8,7 @@ class ProductModel {
   late int price;
   String? image;
   late DateTime saveTime;
-  late DateTime modifyTime;
+  DateTime? modifyTime;
   List<String> likedUids = [];
 
   bool like(String uid) {
@@ -25,7 +25,7 @@ class ProductModel {
     price = json['price'];
     image = json['image'];
     saveTime = (json['saveTime'] as Timestamp).toDate();
-    modifyTime = (json['modifyTime'] as Timestamp).toDate();
+    modifyTime = (json['modifyTime'] as Timestamp?)?.toDate();
     likedUids = json['likedUid'].cast<String>();
   }
 
@@ -37,7 +37,8 @@ class ProductModel {
     'price': price,
     'image': image,
     'saveTime': Timestamp.fromDate(saveTime),
-    'modifyTime': Timestamp.fromDate(modifyTime),
+    'modifyTime': modifyTime == null 
+      ? null : Timestamp.fromDate(modifyTime!),
     'likedUid': likedUids,
   };
 }

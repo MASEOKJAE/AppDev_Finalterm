@@ -41,9 +41,7 @@ class _DetailPageState extends State<DetailPage> {
       builder: (context, provider, child) {
         UserRepository userProvider =
             Provider.of<UserRepository>(context, listen: false);
-        ProductRepository repository =
-            Provider.of<ProductRepository>(context, listen: false);
-        ProductModel product = repository.getProduct(_product!.id!);
+        ProductModel product = provider.getProduct(_product!.id!);
 
         return Scaffold(
           appBar: AppBar(
@@ -66,7 +64,7 @@ class _DetailPageState extends State<DetailPage> {
                 IconButton(
                   icon: const Icon(Icons.delete),
                   onPressed: () async {
-                    repository.deleteProduct(product.id!);
+                    provider.deleteProduct(product.id!);
                     Navigator.pop(context);
                   },
                 ),
@@ -116,9 +114,9 @@ class _DetailPageState extends State<DetailPage> {
                                                 context,
                                                 listen: false);
                                         bool succeeded =
-                                            repository.like(product!);
+                                            repository.like(product);
                                         await repository
-                                            .updateOneToDatabase(product!);
+                                            .updateOneToDatabase(product);
                                         setState(() {});
 
                                         ScaffoldMessenger.of(context)

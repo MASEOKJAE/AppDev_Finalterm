@@ -38,11 +38,13 @@ class ProductRepository extends ChangeNotifier {
 
   void addProduct(ProductModel product) async {
     _products.add(product);
+    print(product.modifyTime);
     await addOneToDatabase(product);
     notifyListeners();
   }
 
   void updateProduct(ProductModel product) async {
+    product.modifyTime = DateTime.now();
     int index = _products.indexWhere((p) => p.id == product.id);
     _products[index] = product;
     await updateOneToDatabase(product);
