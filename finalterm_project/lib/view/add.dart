@@ -162,6 +162,7 @@ class _AddState extends State<AddPage> {
                     decoration: const InputDecoration(
                       labelText: 'Description',
                     ),
+                    keyboardType: TextInputType.number,
                   ),
                 ],
               ),
