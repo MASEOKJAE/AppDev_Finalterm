@@ -73,113 +73,143 @@ class _DetailPageState extends State<DetailPage> {
                 ),
             ],
           ),
-          body: SingleChildScrollView(
-            // for longer descriptions
-            child: Column(
-              children: <Widget>[
-                Image.network(
-                  product.image!,
-                  height: 300,
-                  width: double.infinity,
-                  fit: BoxFit.contain,
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(50.0, 30.0, 50.0, 20.0),
+          body: Column(
+            children: <Widget>[
+              Expanded(
+                child: SingleChildScrollView(
+                  // for longer descriptions
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            product.name,
-                            style: const TextStyle(
-                              fontSize: 22,
-                              color: Color.fromARGB(255, 6, 94, 194),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.thumb_up,
-                                  semanticLabel: 'like',
-                                  color: Colors.red,
+                      Image.network(
+                        product.image!,
+                        height: 300,
+                        width: double.infinity,
+                        fit: BoxFit.contain,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(50.0, 30.0, 50.0, 20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  product.name,
+                                  style: const TextStyle(
+                                    fontSize: 22,
+                                    color: Color.fromARGB(255, 6, 94, 194),
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                                onPressed: () async {
-                                  ProductRepository repository =
-                                      Provider.of<ProductRepository>(context,
-                                          listen: false);
-                                  bool succeeded = repository.like(product!);
-                                  await repository
-                                      .updateOneToDatabase(product!);
-                                  setState(() {});
-
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        succeeded
-                                            ? 'I LIKE IT !'
-                                            : 'You can only do it once !!',
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.thumb_up,
+                                        semanticLabel: 'like',
+                                        color: Colors.red,
+                                      ),
+                                      onPressed: () async {
+                                        ProductRepository repository =
+                                            Provider.of<ProductRepository>(
+                                                context,
+                                                listen: false);
+                                        bool succeeded =
+                                            repository.like(product!);
+                                        await repository
+                                            .updateOneToDatabase(product!);
+                                        setState(() {});
+                      
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              succeeded
+                                                  ? 'I LIKE IT !'
+                                                  : 'You can only do it once !!',
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      '${product.likedUids.length}',
+                                      style: const TextStyle(
+                                        color: Colors.red,
                                       ),
                                     ),
-                                  );
-                                },
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10.0),
+                      
+                            Text(
+                              '\$ ${product.price}',
+                              style: const TextStyle(
+                                fontSize: 18,
+                                color: Color.fromARGB(255, 22, 114, 220),
                               ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                '${product.likedUids.length}',
-                                style: const TextStyle(
-                                  color: Colors.red,
+                            ),
+                      
+                            const SizedBox(height: 20.0),
+                      
+                            const Divider(
+                              height: 1.0,
+                              color: Colors.black,
+                            ),
+                      
+                            const SizedBox(height: 15.0),
+                      
+                            // Long description may need to scroll within the page.
+                            SingleChildScrollView(
+                              child: Container(
+                                padding: EdgeInsets.only(
+                                  top:
+                                      MediaQuery.of(context).size.height * .015,
+                                ),
+                                child: Text(
+                                  product.description,
+                                  textAlign: TextAlign.justify,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: Color.fromARGB(255, 22, 114, 220),
+                                  ),
                                 ),
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10.0),
-
-                      Text(
-                        '\$ ${product.price}',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Color.fromARGB(255, 22, 114, 220),
-                        ),
-                      ),
-
-                      const SizedBox(height: 20.0),
-
-                      const Divider(
-                        height: 1.0,
-                        color: Colors.black,
-                      ),
-
-                      const SizedBox(height: 15.0),
-
-                      // Long description may need to scroll within the page.
-                      SingleChildScrollView(
-                        child: Container(
-                          padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * .015,
-                          ),
-                          child: Text(
-                            product.description,
-                            textAlign: TextAlign.justify,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Color.fromARGB(255, 22, 114, 220),
                             ),
-                          ),
+                      
+                            const SizedBox(
+                              height: 50,
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(50.0, 30.0, 100.0, 20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Creator: ${product.userId} \n${product.saveTime} Created\n${product.modifyTime} Modified',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Color.fromARGB(255, 22, 114, 220),
+                      ),
+                    ),
+                    const SizedBox(height: 50),
+                  ],
+                ),
+              ),
+            ],
           ),
         );
       },

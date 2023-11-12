@@ -41,4 +41,3 @@ class ProductModel {
     'likedUid': likedUids,
   };
 }
-
