@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:finalterm_project/model/user.dart';
+import 'package:finalterm_project/model/user_repository.dart';
+
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -11,9 +14,29 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   User? user = FirebaseAuth.instance.currentUser;
+  UserModel? _user;
+  final UserRepository _userRepository = UserRepository();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserInfo();
+  }
+
+  void fetchUserInfo() async {
+    await _userRepository.loadAllFromDatabase();
+    setState(() {
+      _user = _userRepository.getUser(user!.uid);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    String imageUrl =
+        user?.photoURL ?? "http://handong.edu/site/handong/res/img/logo.png";
+    String uid = user?.uid ?? 'Anonymous UID';
+    String email = user?.email ?? 'Anonymous';
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -29,42 +52,43 @@ class _ProfileState extends State<Profile> {
       ),
       backgroundColor: Colors.black,
       body: Padding(
-        padding: const EdgeInsets.all(70.0),
+        padding: const EdgeInsets.fromLTRB(70.0, 10.0, 70.0, 10.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (user != null)
-              // Container(
-              //   width: 100,
-              //   height: 100,
-              //   decoration: const BoxDecoration(
-              //     image: DecorationImage(
-              //       fit: BoxFit.cover,
-              //       image: 
-              //     ),
-              //       shape: BoxShape.rectangle,
-              //     ),
-              // ),
-            const SizedBox(height: 10),
+            Container(
+              color: Colors.white,
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.contain,
+                      image: CachedNetworkImageProvider(imageUrl),
+                    ),
+                    // shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 70),
             Text(
-              '<${user?.uid}>',
+              '<$uid>',
               style: const TextStyle(
-                fontSize: 30,
+                fontSize: 25,
                 color: Colors.white,
               ),
             ),
             const SizedBox(height: 20),
-
             const Divider(
               height: 1.0,
               thickness: 1,
               color: Colors.white,
             ),
-
             const SizedBox(height: 30),
             Text(
-              user?.email ?? 'Anonymous',
+              email,
               style: const TextStyle(
                 fontSize: 15,
                 color: Colors.white,
@@ -72,16 +96,16 @@ class _ProfileState extends State<Profile> {
             ),
             const SizedBox(height: 60),
             const Text(
-              'MA SEOK JAE',
+              'Seokjae Ma',
               style: TextStyle(
                 fontSize: 15,
                 color: Colors.white,
               ),
             ),
             const SizedBox(height: 15),
-            const Text(
-              'I promise to take the test honestly before GOD',
-              style: TextStyle(
+            Text(
+              _user?.statusMessage ?? '',
+              style: const TextStyle(
                 fontSize: 15,
                 color: Colors.white,
               ),

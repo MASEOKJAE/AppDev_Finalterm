@@ -10,7 +10,6 @@ class UserModel {
     uid = credential.user!.uid;
     name = credential.user!.displayName;
     email = credential.user!.email;
-    // statusMessage = 'I promise to take the test honestly before GOD.';
   }
   
   UserModel.fromJson(this.uid, Map<String, dynamic> json) {

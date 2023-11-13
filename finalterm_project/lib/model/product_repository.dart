@@ -38,7 +38,6 @@ class ProductRepository extends ChangeNotifier {
 
   void addProduct(ProductModel product) async {
     _products.add(product);
-    print(product.modifyTime);
     await addOneToDatabase(product);
     notifyListeners();
   }
