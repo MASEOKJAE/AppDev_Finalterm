@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finalterm_project/model/product_repository.dart';
 import 'package:finalterm_project/model/user.dart';
@@ -23,7 +25,8 @@ class _LoginPageState extends State<LoginPage> {
     // Google 로그인 프로세스 진행
     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
     // 사용자가 로그인에 성공하면, 해당 사용자 계정의 인증 정보를 얻음
-    final GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser!.authentication;
 
     // Google 로그인에서 얻은 인증 정보를 바탕으로 Firebase 인증 정보 생성
     final credential = GoogleAuthProvider.credential(
@@ -31,12 +34,16 @@ class _LoginPageState extends State<LoginPage> {
       idToken: googleAuth.idToken,
     );
 
-    final UserCredential userCredential = await _auth.signInWithCredential(credential);
+    final UserCredential userCredential =
+        await _auth.signInWithCredential(credential);
 
     // Firestore에 사용자 정보 저장
-    // SetOptions(merge: true)는 이미 동일한 uid로 저장된 데이터가 있다면, 
+    // SetOptions(merge: true)는 이미 동일한 uid로 저장된 데이터가 있다면,
     // 새로운 데이터로 병합(merge)하라는 의미
-    FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userCredential.user!.uid)
+        .set({
       'name': userCredential.user!.displayName,
       'email': userCredential.user!.email,
       'uid': userCredential.user!.uid,
@@ -44,7 +51,10 @@ class _LoginPageState extends State<LoginPage> {
     }, SetOptions(merge: true));
 
     // Firestore에서 사용자 정보 로드
-    final doc = await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).get();
+    final doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userCredential.user!.uid)
+        .get();
     final user = UserModel.fromJson(doc.id, doc.data() as Map<String, dynamic>);
 
     UserRepository.login(user);
@@ -55,13 +65,19 @@ class _LoginPageState extends State<LoginPage> {
     final UserCredential userCredential = await _auth.signInAnonymously();
 
     // Firestore에 사용자 정보 저장
-    FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userCredential.user!.uid)
+        .set({
       'uid': userCredential.user!.uid,
       'status_message': 'I promise to take the test honestly before GOD.',
     }, SetOptions(merge: true));
 
     // Firestore에서 사용자 정보 로드
-    final doc = await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).get();
+    final doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userCredential.user!.uid)
+        .get();
     final user = UserModel.fromJson(doc.id, doc.data() as Map<String, dynamic>);
 
     UserRepository.login(user);
@@ -71,26 +87,50 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-              child: const Text('Sign in with Google'),
-              onPressed: () async {
-                await signInWithGoogle();
-                await Provider.of<ProductRepository>(context, listen: false).loadAllFromDatabase();
-                Navigator.pushReplacementNamed(context, '/');
-              },
-            ),
-            ElevatedButton(
-              child: const Text('Sign in Anonymously'),
-              onPressed: () async {
-                await signInAnonymously();
-                await Provider.of<ProductRepository>(context, listen: false).loadAllFromDatabase();
-                Navigator.pushReplacementNamed(context, '/');
-              },
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(100.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(
+                'assets/hguLogo.png',
+                height: 300,
+                width: double.infinity,
+                fit: BoxFit.contain,
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              ElevatedButton(
+                style: ButtonStyle(
+                  minimumSize: MaterialStateProperty.all<Size>(
+                      const Size(200, 50)), // 버튼의 최소 크기 설정
+                ),
+                onPressed: () async {
+                  await signInWithGoogle();
+                  await Provider.of<ProductRepository>(context, listen: false)
+                      .loadAllFromDatabase();
+                  Navigator.pushReplacementNamed(context, '/');
+                },
+                child: const Text('Google Login'),
+              ),
+              const SizedBox(height: 10,),
+              
+              ElevatedButton(
+                style: ButtonStyle(
+                  minimumSize: MaterialStateProperty.all<Size>(
+                      const Size(200, 50)), // 버튼의 최소 크기 설정
+                ),
+                onPressed: () async {
+                  await signInAnonymously();
+                  await Provider.of<ProductRepository>(context, listen: false)
+                      .loadAllFromDatabase();
+                  Navigator.pushReplacementNamed(context, '/');
+                },
+                child: const Text('Guest Login'),
+              ),
+            ],
+          ),
         ),
       ),
     );

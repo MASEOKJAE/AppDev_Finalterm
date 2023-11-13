@@ -51,6 +51,7 @@ class _AddState extends State<AddPage> {
     });
 
     final String imageUrl = await _uploadImage();
+    print('가져온 이미지 주소!! ->  ${imageUrl}');
 
     ProductModel newProduct = ProductModel.fromJson({
       'userId': userId,
@@ -82,9 +83,18 @@ class _AddState extends State<AddPage> {
         .child('products')
         .child('${DateTime.now().millisecondsSinceEpoch}.jpg');
 
-    await ref.putFile(
-      File(_image!.path),
-    );
+    print('이미지 가지러 왔습니다!!\n');
+    // await ref.putFile(
+    //   File(_image!.path),
+    // );
+    try {
+      await ref.putFile(
+        File(_image!.path),
+      );
+    } catch (e) {
+      print('Failed to upload image: $e');
+      // You can also show a dialog or a snackbar with the error message.
+    }
 
     return await ref.getDownloadURL();
   }
@@ -141,15 +151,20 @@ class _AddState extends State<AddPage> {
                     width: double.infinity,
                     fit: BoxFit.contain,
                   ),
-            IconButton(
-              icon: const Icon(
-                Icons.camera_alt,
-                semanticLabel: 'pickImage',
-                color: Colors.black,
-              ),
-              onPressed: () {
-                _pickImage();
-              },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.camera_alt,
+                    semanticLabel: 'pickImage',
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    _pickImage();
+                  },
+                ),
+              ],
             ),
             Expanded(
               child: ListView(
