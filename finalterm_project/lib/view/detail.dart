@@ -144,7 +144,7 @@ class _DetailPageState extends State<DetailPage> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 10.0),
+                            const SizedBox(height: 5.0),
 
                             Text(
                               '\$ ${product.price}',

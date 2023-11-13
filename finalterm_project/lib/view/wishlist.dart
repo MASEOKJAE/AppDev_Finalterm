@@ -12,7 +12,6 @@ class WishListPage extends StatefulWidget {
 }
 
 class _WishListState extends State<WishListPage> {
-  @override
   List<Widget> _buildListCards(BuildContext context) {
     UserRepository userProvider =
         Provider.of<UserRepository>(context, listen: false);
@@ -40,7 +39,12 @@ class _WishListState extends State<WishListPage> {
                       fit: BoxFit.contain,
                     ),
                   ),
-                  title: Text(product.name),
+                  title: Text(
+                    product.name,
+                    style: TextStyle(
+                      color: Colors.blue.shade800,
+                    ),
+                  ),
                 ),
                 Positioned(
                   // Positioned 위젯은 Stack 내에서 절대 위치를 지정할 수 있습니다.

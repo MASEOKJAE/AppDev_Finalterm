@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
                           aspectRatio: 18 / 11,
                           child: Image.network(
                             p.image!,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.contain,
                           ),
                         ),
                         if (user.isInWishlist(p.id!))

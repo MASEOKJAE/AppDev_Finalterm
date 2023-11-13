@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:finalterm_project/model/product.dart';
 import 'package:finalterm_project/model/product_repository.dart';
@@ -60,7 +62,8 @@ class _AddState extends State<AddPage> {
       'likedUid': [],
     });
 
-    Provider.of<ProductRepository>(context, listen: false).addProduct(newProduct);
+    Provider.of<ProductRepository>(context, listen: false)
+        .addProduct(newProduct);
 
     setState(() {
       _isLoading = false;
@@ -125,20 +128,29 @@ class _AddState extends State<AddPage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
-            // if (_image != null)
-            //   Image.file(File(_image!.path))
-            // else
-            //   Image.network('http://handong.edu/site/handong/res/img/logo.png'),
-            // IconButton(
-            //   icon: const Icon(
-            //     Icons.camera_alt,
-            //     semanticLabel: 'pickImage',
-            //     color: Colors.black,
-            //   ),
-            //   onPressed: () {
-            //     _pickImage();
-            //   },
-            // ),
+            _image != null
+                ? Image.file(
+                    File(_image!.path),
+                    height: 300,
+                    width: double.infinity,
+                    fit: BoxFit.contain,
+                  )
+                : Image.network(
+                    'http://handong.edu/site/handong/res/img/logo.png',
+                    height: 300,
+                    width: double.infinity,
+                    fit: BoxFit.contain,
+                  ),
+            IconButton(
+              icon: const Icon(
+                Icons.camera_alt,
+                semanticLabel: 'pickImage',
+                color: Colors.black,
+              ),
+              onPressed: () {
+                _pickImage();
+              },
+            ),
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
